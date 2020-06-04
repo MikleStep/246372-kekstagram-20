@@ -43,15 +43,20 @@ var getRandomInt = function (max) {
 };
 
 // Функция нахождения количества сообщений из массива messagesText
-var getNumberOfMessages = function () {
-  var numberOfMessages = getRandomInt(2);
-  var messageText = '';
-  if (numberOfMessages === 1) {
-    messageText = messagesText[getRandomInt(messagesText.length)];
-  } else {
-    messageText = messagesText[getRandomInt(messagesText.length)] + ' ' + messagesText[getRandomInt(messagesText.length)];
+var getNumberOfComments = function () {
+  var comments = [];
+  var numberOfComments = getRandomInt(5);
+  for (var i = 0; i <= numberOfComments; i++) {
+    var commentAvatar = 'img/avatar-' + getRandomArbitrary(1, 6) + '.svg';
+    var commentMessage = messagesText[getRandomInt(messagesText.length)];
+    var commentName = names[getRandomInt(names.length)];
+    comments[i] = {
+      avatar: commentAvatar,
+      message: commentMessage,
+      name: commentName
+    };
   }
-  return messageText;
+  return comments;
 };
 
 // Функция формирования массива объектов для фотографий (url, description, лайки, url аватара пользователя комментария, сам комментарий, имя пользователя комментария)
@@ -60,21 +65,28 @@ var getPhoto = function () {
     var photoUrl = 'photos/' + (i + 1) + '.jpg';
     var photoDescription = '';
     var photoLikes = getRandomArbitrary(15, 100);
-    var commentAvatar = 'img/avatar-' + getRandomArbitrary(1, 6) + '.svg';
-    var commentName = names[getRandomInt(names.length)];
     photosInformation[i] = {
       url: photoUrl,
       description: photoDescription,
       likes: photoLikes,
-      comment: {
-        avatar: commentAvatar,
-        message: getNumberOfMessages(),
-        name: commentName
-      }
+      comments: getNumberOfComments()
     };
   }
   return photosInformation;
 };
-
-
 getPhoto();
+
+// var picturesElement = document.querySelector('.pictures');
+var picturesTemplate = document.querySelector('#picture')
+  .content
+  .querySelector('.picture');
+
+var renderPicture = function (photo) {
+  var pictureElement = picturesTemplate.cloneNode(true);
+  pictureElement.querySelector('.picture__img').setAttribute('alt', photo.url);
+  pictureElement.querySelector('.picture__likes').textContent = photo.likes;
+  // pictureElement.querySelector('.picture__comments').textContent =
+  return pictureElement;
+};
+
+renderPicture(photosInformation);
