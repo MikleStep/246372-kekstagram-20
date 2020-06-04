@@ -39,13 +39,13 @@ var getRandomArbitrary = function (min, max) {
 
 // Рандомизатор до определенного числа
 var getRandomInt = function (max) {
-  return Math.floor(Math.random() * Math.floor(max));
+  return Math.floor(Math.random() * max);
 };
 
 // Функция нахождения количества сообщений из массива messagesText
 var getNumberOfComments = function () {
   var comments = [];
-  var numberOfComments = getRandomInt(5);
+  var numberOfComments = getRandomInt(2);
   for (var i = 0; i <= numberOfComments; i++) {
     var commentAvatar = 'img/avatar-' + getRandomArbitrary(1, 6) + '.svg';
     var commentMessage = messagesText[getRandomInt(messagesText.length)];
@@ -76,17 +76,23 @@ var getPhoto = function () {
 };
 getPhoto();
 
-// var picturesElement = document.querySelector('.pictures');
+// Вывод фотографий в DOM из массива данных
+var picturesElement = document.querySelector('.pictures');
 var picturesTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
 var renderPicture = function (photo) {
   var pictureElement = picturesTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').setAttribute('alt', photo.url);
+  pictureElement.querySelector('.picture__img').setAttribute('src', photo.url);
   pictureElement.querySelector('.picture__likes').textContent = photo.likes;
-  // pictureElement.querySelector('.picture__comments').textContent =
+  pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
   return pictureElement;
 };
 
-renderPicture(photosInformation);
+var fragment = document.createDocumentFragment();
+for (var i = 0; i < photosInformation.length; i++) {
+  fragment.appendChild(renderPicture(photosInformation[i]));
+}
+
+picturesElement.appendChild(fragment);
