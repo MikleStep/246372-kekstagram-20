@@ -90,9 +90,11 @@ var renderPicture = function (photo) {
   return pictureElement;
 };
 
-var fragment = document.createDocumentFragment();
+var pictureFragment = document.createDocumentFragment();
 for (var i = 0; i < photosInformation.length; i++) {
-  fragment.appendChild(renderPicture(photosInformation[i]));
+  pictureFragment.appendChild(renderPicture(photosInformation[i]));
 }
 
-picturesElement.appendChild(fragment);
+picturesElement.appendChild(pictureFragment);
+
+
