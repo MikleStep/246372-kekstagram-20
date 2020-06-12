@@ -1,7 +1,5 @@
 'use strict';
 
-var photosInformation = [];
-
 // Массив случайных сообщений
 var messagesText = [
   'Всё отлично!',
@@ -10,6 +8,14 @@ var messagesText = [
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают.Как можно было поймать такой неудачный момент?!',
+];
+
+var descriptionText = [
+  'Lorem ipsum',
+  'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore',
+  'But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system',
+  'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi',
+  'On the other hand'
 ];
 
 // Массив случайных имен
@@ -45,36 +51,30 @@ var getRandomInt = function (max) {
 // Функция нахождения количества сообщений из массива messagesText
 var getNumberOfComments = function () {
   var comments = [];
-  var numberOfComments = getRandomInt(2);
-  for (var i = 0; i <= numberOfComments; i++) {
-    var commentAvatar = 'img/avatar-' + getRandomArbitrary(1, 6) + '.svg';
-    var commentMessage = messagesText[getRandomInt(messagesText.length)];
-    var commentName = names[getRandomInt(names.length)];
+  for (var i = 0; i <= getRandomInt(2); i++) {
     comments[i] = {
-      avatar: commentAvatar,
-      message: commentMessage,
-      name: commentName
+      avatar: 'img/avatar-' + getRandomArbitrary(1, 6) + '.svg',
+      message: messagesText[getRandomInt(messagesText.length)],
+      name: names[getRandomInt(names.length)]
     };
   }
   return comments;
 };
 
 // Функция формирования массива объектов для фотографий (url, description, лайки, url аватара пользователя комментария, сам комментарий, имя пользователя комментария)
-var getPhoto = function () {
-  for (var i = 0; i < 25; i++) {
-    var photoUrl = 'photos/' + (i + 1) + '.jpg';
-    var photoDescription = '';
-    var photoLikes = getRandomArbitrary(15, 100);
+var getPhotos = function (quantity) {
+  var photosInformation = [];
+  for (var i = 0; i < quantity; i++) {
     photosInformation[i] = {
-      url: photoUrl,
-      description: photoDescription,
-      likes: photoLikes,
+      url: 'photos/' + (i + 1) + '.jpg',
+      description: descriptionText[getRandomInt(descriptionText.length)],
+      likes: getRandomArbitrary(15, 100),
       comments: getNumberOfComments()
     };
   }
   return photosInformation;
 };
-getPhoto();
+var photosInformation = getPhotos(25);
 
 // Вывод фотографий в DOM из массива данных
 var picturesElement = document.querySelector('.pictures');
