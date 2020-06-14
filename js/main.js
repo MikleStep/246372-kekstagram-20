@@ -109,7 +109,7 @@ var onPopupEscPress = function (target) {
       closeModal(target);
     }
   };
-}
+};
 var openModal = function (target) {
   target.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
@@ -128,7 +128,6 @@ bigPictureOpen.addEventListener('click', function () {
 
 bigPictureClose.addEventListener('click', function () {
   closeModal(bigPicture);
-  document.removeEventListener('keydown', onPopupEscPress(bigPicture));
 });
 
 
@@ -155,16 +154,44 @@ document.querySelector('.comments-loader').classList.add('hidden');
 
 // Задание 4.2.1 Загрузка изображения и показ формы редактирования
 
-var uploadButton = document.querySelector('#upload-file');
+var uploadFile = document.querySelector('#upload-file');
 var uploadClose = document.querySelector('#upload-cancel');
 var uploadWrapper = document.querySelector('.img-upload__overlay');
 
 
-uploadButton.addEventListener('change', function () {
+uploadFile.addEventListener('change', function () {
   openModal(uploadWrapper);
 });
 
 uploadClose.addEventListener('click', function () {
   closeModal(uploadWrapper);
-  document.removeEventListener('keydown', onPopupEscPress(uploadWrapper));
+  uploadFile.value = '';
+});
+
+// Задание 4.2.2 Редактирование изображения и ограничения, накладываемые на поля
+
+var imgIncrease = uploadWrapper.querySelector('.scale__control--bigger');
+var imgReduce = uploadWrapper.querySelector('.scale__control--smaller');
+var imgSize = uploadWrapper.querySelector('.scale__control--value');
+var imgPreview = document.querySelector('.img-upload__preview img');
+
+var changeSizeImg = function (step) {
+  imgSize.value = parseInt(imgSize.value, 10);
+  if (Number(imgSize.value) + step > 100) {
+    imgSize.value = 100;
+  } else if (Number(imgSize.value) + step < 25) {
+    imgSize.value = 25;
+  } else if (imgSize.value !== 25 && imgSize.value !== 100) {
+    imgSize.value = (Number(imgSize.value) + step);
+  }
+  imgPreview.style.transform = 'scale:' + ('0.' + imgSize.value);
+  return imgSize.value;
+};
+
+imgIncrease.addEventListener('click', function () {
+  imgSize.value = changeSizeImg(25) + '%';
+});
+
+imgReduce.addEventListener('click', function () {
+  imgSize.value = changeSizeImg(-25) + '%';
 });
