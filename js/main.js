@@ -102,32 +102,33 @@ var bigPicture = document.querySelector('.big-picture');
 var bigPictureOpen = document.querySelector('.picture');
 var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 
-var onPopupEscPress = function (evt) {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    closePopup();
-  }
+var onPopupEscPress = function (target) {
+  return function (evt) {
+    if (evt.key === 'Escape') {
+      evt.preventDefault();
+      closeModal(target);
+    }
+  };
+}
+var openModal = function (target) {
+  target.classList.remove('hidden');
+  document.querySelector('body').classList.add('modal-open');
+  document.addEventListener('keydown', onPopupEscPress(target));
 };
 
-var openPopup = function () {
-  bigPicture.classList.remove('hidden');
-
-  document.addEventListener('keydown', onPopupEscPress);
-};
-
-var closePopup = function () {
-  bigPicture.classList.add('hidden');
-
-  document.removeEventListener('keydown', onPopupEscPress);
+var closeModal = function (target) {
+  target.classList.add('hidden');
+  document.querySelector('body').classList.remove('modal-open');
+  document.removeEventListener('keydown', onPopupEscPress(target));
 };
 
 bigPictureOpen.addEventListener('click', function () {
-  openPopup();
+  openModal(bigPicture);
 });
 
 bigPictureClose.addEventListener('click', function () {
-  closePopup();
-  document.removeEventListener('keydown', onPopupEscPress);
+  closeModal(bigPicture);
+  document.removeEventListener('keydown', onPopupEscPress(bigPicture));
 });
 
 
@@ -151,4 +152,19 @@ renderModalPhoto(photosInformation[0]);
 
 document.querySelector('.social__comment-count').classList.add('hidden');
 document.querySelector('.comments-loader').classList.add('hidden');
-document.querySelector('body').classList.add('modal-open');
+
+// Задание 4.2.1 Загрузка изображения и показ формы редактирования
+
+var uploadButton = document.querySelector('#upload-file');
+var uploadClose = document.querySelector('#upload-cancel');
+var uploadWrapper = document.querySelector('.img-upload__overlay');
+
+
+uploadButton.addEventListener('change', function () {
+  openModal(uploadWrapper);
+});
+
+uploadClose.addEventListener('click', function () {
+  closeModal(uploadWrapper);
+  document.removeEventListener('keydown', onPopupEscPress(uploadWrapper));
+});
