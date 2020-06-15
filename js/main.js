@@ -204,11 +204,11 @@ imgReduce.addEventListener('click', function () {
 
 var effectsOptions = document.querySelectorAll('.effects__radio');
 var effectSaturation = document.querySelector('.effect-level__value');
-var effectSaturationPin = document.querySelector('.effect-level__pin');
+/* var effectSaturationPin = document.querySelector('.effect-level__pin');
 
 var getEffectSaturation = function () {
 
-};
+}; */
 
 var effectsInformation = [
   {
