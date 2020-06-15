@@ -174,42 +174,35 @@ var imgIncrease = uploadWrapper.querySelector('.scale__control--bigger');
 var imgReduce = uploadWrapper.querySelector('.scale__control--smaller');
 var imgSize = uploadWrapper.querySelector('.scale__control--value');
 var imgPreview = document.querySelector('.img-upload__preview img');
-
+imgPreview.style.transition = 'transform 0.2s linear';
+var imgValue = parseInt(imgSize.value, 10);
+imgPreview.style.transform = 'scale' + '(' + imgValue / 100 + ')';
 var changeSizeImg = function (step) {
-  imgSize.value = parseInt(imgSize.value, 10);
-  if (Number(imgSize.value) + step > 100) {
-    imgSize.value = 100;
-  } else if (Number(imgSize.value) + step < 25) {
-    imgSize.value = 25;
-  } else if (imgSize.value !== 25 && imgSize.value !== 100) {
-    imgSize.value = (Number(imgSize.value) + step);
+  imgValue += step;
+  if (imgValue > 100) {
+    imgValue = 100;
+  } else if (imgValue < 25) {
+    imgValue = 25;
   }
-  imgPreview.style.transform = 'scale:' + ('0.' + imgSize.value);
-  return imgSize.value;
+  imgPreview.style.transform = 'scale' + '(' + imgValue / 100 + ')';
+  return imgValue;
 };
 
 imgIncrease.addEventListener('click', function () {
-  var newImgValue = changeSizeImg(25) + '%';
-  imgSize.value = newImgValue;
-  imgSize.setAttribute('value', newImgValue);
+  imgSize.setAttribute('value', changeSizeImg(25) + '%');
 });
 
 imgReduce.addEventListener('click', function () {
-  var newImgValue = changeSizeImg(-25) + '%';
-  imgSize.value = newImgValue;
-  imgSize.setAttribute('value', newImgValue);
+  imgSize.setAttribute('value', changeSizeImg(-25) + '%');
 });
 
 // Задание 4.2.3 Наложение эффекта на изображение
 
 var effectsOptions = document.querySelectorAll('.effects__radio');
 var effectSaturation = document.querySelector('.effect-level__value');
-/* var effectSaturationPin = document.querySelector('.effect-level__pin');
-
-var getEffectSaturation = function () {
-
-}; */
-
+var effectSaturationPin = document.querySelector('.effect-level__pin');
+var effectSaturationDepth = document.querySelector('.effect-level__depth');
+var effectSaturationLine = document.querySelector('.effect-level__line');
 var effectsInformation = [
   {
     name: 'none',
@@ -218,41 +211,102 @@ var effectsInformation = [
   },
   {
     name: 'chrome',
-    filter: 'grayscale(',
-    start: '1)'
+    filter: 'grayscale',
+    start: 1,
+    min: 0,
+    max: 1
   },
   {
     name: 'sepia',
-    filter: 'sepia(',
-    start: '1)'
+    filter: 'sepia',
+    start: 1,
+    min: 0,
+    max: 1
   },
   {
     name: 'marvin',
-    filter: 'invert(',
-    start: '100%)'
+    filter: 'invert',
+    start: 100,
+    min: 0,
+    max: 100,
+    units: '%'
   },
   {
     name: 'phobos',
-    filter: 'blur(',
-    start: '3)'
+    filter: 'blur',
+    start: 3,
+    min: 0,
+    max: 3,
+    units: 'px'
   },
   {
     name: 'heat',
-    filter: 'brightness(',
-    start: '3px)'
+    filter: 'brightness',
+    start: 3,
+    min: 1,
+    max: 3
   }
 ];
+
+var movePin = function (evt) {
+  var limitMovementX = {
+    min: effectSaturationLine.offsetLeft - 20,
+    max: effectSaturationLine.offsetLeft + effectSaturationLine.offsetWidth - effectSaturationPin.offsetWidth
+  };
+  var pinCoord = effectSaturationPin.offsetLeft + evt.movementX;
+  if (pinCoord < limitMovementX.min) {
+    pinCoord = limitMovementX.min;
+  }
+  if (pinCoord > limitMovementX.max) {
+    pinCoord = limitMovementX.max;
+  }
+  effectSaturationPin.style.left = pinCoord + 'px';
+  effectSaturationDepth.style.width = pinCoord + 'px';
+  var saturationValue = Math.round(pinCoord / effectSaturationLine.offsetWidth * 100);
+  effectSaturation.setAttribute('value', saturationValue);
+  var currentNumber;
+  for (var b = 0; b < effectsOptions.length; b++) {
+    if (effectsOptions[b].checked) {
+      currentNumber = b;
+    }
+  }
+  var filterValue = saturationValue * (effectsInformation[currentNumber].max - effectsInformation[currentNumber].min) / 100 + effectsInformation[currentNumber].min;
+  if (effectsInformation[currentNumber].units) {
+    filterValue += effectsInformation[currentNumber].units;
+  }
+  imgPreview.style.filter = effectsInformation[currentNumber].filter + '(' + filterValue + ')';
+};
+
+var onPinMouseup = function () {
+  document.removeEventListener('mousemove', movePin);
+  document.removeEventListener('mouseup', onPinMouseup);
+};
+effectSaturationPin.addEventListener('mousedown', function () {
+  effectSaturationPin.addEventListener('dragstart', function (evt) {
+    evt.preventDefault();
+  });
+  document.addEventListener('mousemove', movePin);
+  document.addEventListener('mouseup', onPinMouseup);
+});
 
 var addThumbnailClickHandler = function (thumbnail, effect) {
   thumbnail.addEventListener('click', function () {
     imgPreview.setAttribute('class', '');
+    imgPreview.style.filter = 'none';
     imgPreview.classList.add('effects__preview--' + effect.name);
-    imgPreview.style.filter = effect.filter + effect.start;
-    effectSaturation.value = '100';
+    var filterValue = effect.start;
+    if (effect.units) {
+      filterValue += effect.units;
+    }
+    imgPreview.style.filter = effect.filter + '(' + filterValue + ')';
     effectSaturation.setAttribute('value', '100');
+    effectSaturationPin.style.left = effectSaturation.value + '%';
+    effectSaturationDepth.style.width = effectSaturation.value + '%';
   });
 };
 
 for (var a = 0; a < effectsOptions.length; a++) {
   addThumbnailClickHandler(effectsOptions[a], effectsInformation[a]);
 }
+
+
