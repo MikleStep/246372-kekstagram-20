@@ -158,7 +158,7 @@ var uploadFile = document.querySelector('#upload-file');
 var uploadClose = document.querySelector('#upload-cancel');
 var uploadWrapper = document.querySelector('.img-upload__overlay');
 
-
+uploadWrapper.classList.remove('hidden');
 uploadFile.addEventListener('change', function () {
   openModal(uploadWrapper);
 });
@@ -189,9 +189,70 @@ var changeSizeImg = function (step) {
 };
 
 imgIncrease.addEventListener('click', function () {
-  imgSize.value = changeSizeImg(25) + '%';
+  var newImgValue = changeSizeImg(25) + '%';
+  imgSize.value = newImgValue;
+  imgSize.setAttribute('value', newImgValue);
 });
 
 imgReduce.addEventListener('click', function () {
-  imgSize.value = changeSizeImg(-25) + '%';
+  var newImgValue = changeSizeImg(-25) + '%';
+  imgSize.value = newImgValue;
+  imgSize.setAttribute('value', newImgValue);
 });
+
+// Задание 4.2.3 Наложение эффекта на изображение
+
+var effectsOptions = document.querySelectorAll('.effects__radio');
+var effectSaturation = document.querySelector('.effect-level__value');
+var effectSaturationPin = document.querySelector('.effect-level__pin');
+
+var getEffectSaturation = function () {
+
+};
+
+var effectsInformation = [
+  {
+    name: 'none',
+    filter: 'none',
+    start: ''
+  },
+  {
+    name: 'chrome',
+    filter: 'grayscale(',
+    start: '1)'
+  },
+  {
+    name: 'sepia',
+    filter: 'sepia(',
+    start: '1)'
+  },
+  {
+    name: 'marvin',
+    filter: 'invert(',
+    start: '100%)'
+  },
+  {
+    name: 'phobos',
+    filter: 'blur(',
+    start: '3)'
+  },
+  {
+    name: 'heat',
+    filter: 'brightness(',
+    start: '3px)'
+  }
+];
+
+var addThumbnailClickHandler = function (thumbnail, effect) {
+  thumbnail.addEventListener('click', function () {
+    imgPreview.setAttribute('class', '');
+    imgPreview.classList.add('effects__preview--' + effect.name);
+    imgPreview.style.filter = effect.filter + effect.start;
+    effectSaturation.value = '100';
+    effectSaturation.setAttribute('value', '100');
+  });
+};
+
+for (var a = 0; a < effectsOptions.length; a++) {
+  addThumbnailClickHandler(effectsOptions[a], effectsInformation[a]);
+}
