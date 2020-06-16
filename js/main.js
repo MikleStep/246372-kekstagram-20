@@ -157,7 +157,6 @@ document.querySelector('.comments-loader').classList.add('hidden');
 var uploadFile = document.querySelector('#upload-file');
 var uploadClose = document.querySelector('#upload-cancel');
 var uploadWrapper = document.querySelector('.img-upload__overlay');
-
 uploadWrapper.classList.remove('hidden');
 uploadFile.addEventListener('change', function () {
   openModal(uploadWrapper);
@@ -309,4 +308,25 @@ for (var a = 0; a < effectsOptions.length; a++) {
   addThumbnailClickHandler(effectsOptions[a], effectsInformation[a]);
 }
 
+// Задание 4.2.4 Валидация хеш-тегов
+
+var hashtagsContainer = document.querySelector('.text__hashtags');
+hashtagsContainer.addEventListener('click', function () {
+  if (hashtagsContainer.value.substr(-1) !== '#') {
+    hashtagsContainer.value += '#';
+  }
+});
+hashtagsContainer.addEventListener('keydown', function (evt) {
+  if (evt.key === ' ') {
+    evt.preventDefault();
+  }
+  if (evt.key === ' ' && hashtagsContainer.value.substr(-1) !== '#' && hashtagsContainer.value.substr(-1) !== ' ') {
+    evt.preventDefault();
+    hashtagsContainer.value += '#';
+  }
+
+});
+hashtagsContainer.addEventListener('invalid', function () {
+
+});
 
