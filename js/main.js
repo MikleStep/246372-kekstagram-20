@@ -309,4 +309,21 @@ for (var a = 0; a < effectsOptions.length; a++) {
   addThumbnailClickHandler(effectsOptions[a], effectsInformation[a]);
 }
 
+var renderModalPhoto = function (photo) {
+  modalPhoto.querySelector('.big-picture__img img').setAttribute('src', photo.url);
+  modalPhoto.querySelector('.likes-count').textContent = photo.likes;
+  modalPhoto.querySelector('.comments-count').textContent = photo.comments.length;
+  for (var k = 0; k < photo.comments.length; k++) {
+    var commentsWrapper = modalPhoto.querySelector('.social__comments');
+    var comment = '<li class="social__comment"><img class="social__picture" src = "' + photo.comments[k].avatar + '" alt = "' + photo.comments[k].name + '" width = "35" height = "35" > <p class="social__text">' + photo.comments[k].message + '</p></li>';
+    commentsWrapper.insertAdjacentHTML('afterbegin', comment);
+  }
+  modalPhoto.querySelector('.social__caption').textContent = photo.description;
+  return modalPhoto;
+};
 
+renderModalPhoto(photosInformation[0]);
+
+document.querySelector('.social__comment-count').classList.add('hidden');
+document.querySelector('.comments-loader').classList.add('hidden');
+document.querySelector('body').classList.add('modal-open');
