@@ -368,26 +368,21 @@ var hashtagsArray;
 imgForm.addEventListener('input', function () {
   hashtagsArray = hashtagsContainer.value.split('#');
   hashtagsArray.splice(0, 1);
-  var re = /[^a-zа-яё\d#]/ui;
+  var re = /[^a-zа-яё\d#]/;
   for (var i = 0; i < hashtagsArray.length; i++) {
     if (re.test(hashtagsArray[i])) {
       hashtagsContainer.setCustomValidity('В хештеге можно использовать только буквы,цифры и слитное написание');
-      console.log('1');
     } else if (checkLength(hashtagsArray) === false) {
       hashtagsContainer.setCustomValidity('Слишком большой хештег. Максимальная длина 20 символов (Включаюя #)');
-      console.log('2');
     } else if (checkCase(hashtagsArray) === false) {
       hashtagsContainer.setCustomValidity('Найден дубликат. Проверьте регистр');
-      console.log('3');
     } else if (checkDuplicate(hashtagsArray) === false) {
       hashtagsContainer.setCustomValidity('Найден дубликат');
-      console.log('4');
     } else {
       hashtagsContainer.setCustomValidity('');
     }
   }
   if (hashtagsArray.length > maxHashtags) {
     hashtagsContainer.setCustomValidity('Можно максимум ' + maxHashtags + ' Хештегов. Удалите пожалуйста лишние');
-    console.log('Можно максимум ' + maxHashtags + ' Хештегов');
   }
 });
