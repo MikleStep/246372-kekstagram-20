@@ -91,8 +91,8 @@ var renderPicture = function (photo) {
 };
 
 var pictureFragment = document.createDocumentFragment();
-for (var i = 0; i < photosInformation.length; i++) {
-  pictureFragment.appendChild(renderPicture(photosInformation[i]));
+for (var b = 0; b < photosInformation.length; b++) {
+  pictureFragment.appendChild(renderPicture(photosInformation[b]));
 }
 
 picturesElement.appendChild(pictureFragment);
@@ -157,7 +157,6 @@ document.querySelector('.comments-loader').classList.add('hidden');
 var uploadFile = document.querySelector('#upload-file');
 var uploadClose = document.querySelector('#upload-cancel');
 var uploadWrapper = document.querySelector('.img-upload__overlay');
-uploadWrapper.classList.remove('hidden');
 uploadFile.addEventListener('change', function () {
   openModal(uploadWrapper);
 });
@@ -173,6 +172,7 @@ var imgIncrease = uploadWrapper.querySelector('.scale__control--bigger');
 var imgReduce = uploadWrapper.querySelector('.scale__control--smaller');
 var imgSize = uploadWrapper.querySelector('.scale__control--value');
 var imgPreview = document.querySelector('.img-upload__preview img');
+var imgForm = document.querySelector('.img-upload__form');
 imgPreview.style.transition = 'transform 0.2s linear';
 var imgValue = parseInt(imgSize.value, 10);
 imgPreview.style.transform = 'scale' + '(' + imgValue / 100 + ')';
@@ -264,9 +264,9 @@ var movePin = function (evt) {
   var saturationValue = Math.round(pinCoord / effectSaturationLine.offsetWidth * 100);
   effectSaturation.setAttribute('value', saturationValue);
   var currentNumber;
-  for (var b = 0; b < effectsOptions.length; b++) {
-    if (effectsOptions[b].checked) {
-      currentNumber = b;
+  for (var i = 0; i < effectsOptions.length; i++) {
+    if (effectsOptions[i].checked) {
+      currentNumber = i;
     }
   }
   var filterValue = saturationValue * (effectsInformation[currentNumber].max - effectsInformation[currentNumber].min) / 100 + effectsInformation[currentNumber].min;
@@ -311,27 +311,83 @@ for (var a = 0; a < effectsOptions.length; a++) {
 // Задание 4.2.4 Валидация хеш-тегов
 
 var hashtagsContainer = document.querySelector('.text__hashtags');
+
 hashtagsContainer.addEventListener('click', function () {
-  if (hashtagsContainer.value.substr(-1) !== '#') {
+  if (hashtagsContainer.value.substr(-1) !== '#' && hashtagsContainer.value.length < 1) {
     hashtagsContainer.value += '#';
   }
 });
 hashtagsContainer.addEventListener('keydown', function (evt) {
+  hashtagsContainer.value = '#' + hashtagsContainer.value.slice(1);
   if (evt.key === ' ') {
+    evt.preventDefault();
+  }
+  if (evt.key === '#') {
     evt.preventDefault();
   }
   if (evt.key === ' ' && hashtagsContainer.value.substr(-1) !== '#' && hashtagsContainer.value.substr(-1) !== ' ') {
     evt.preventDefault();
-    hashtagsContainer.value += '#';
+    hashtagsContainer.value += ' #';
   }
-
-});
-hashtagsContainer.addEventListener('invalid', function () {
-
 });
 
-renderModalPhoto(photosInformation[0]);
+var checkDuplicate = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    for (var j = i + 1; j < array.length; j++) {
+      if (array[i] === array[j] || array[i] === array[j] + ' ') {
+        return false;
+      }
+    }
+  }
+  return true;
+};
 
-document.querySelector('.social__comment-count').classList.add('hidden');
-document.querySelector('.comments-loader').classList.add('hidden');
-document.querySelector('body').classList.add('modal-open');
+var checkCase = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    for (var j = i + 1; j < array.length; j++) {
+      if (array[i].toLowerCase() === array[j].toLowerCase() || array[i].toLowerCase() === array[j].toLowerCase() + ' ') {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+var checkLength = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].length > 20) {
+      return false;
+    }
+  }
+  return true;
+};
+
+var maxHashtags = 5;
+var hashtagsArray;
+
+imgForm.addEventListener('input', function () {
+  hashtagsArray = hashtagsContainer.value.split('#');
+  hashtagsArray.splice(0, 1);
+  var re = /[^a-zа-яё\d#]/ui;
+  for (var i = 0; i < hashtagsArray.length; i++) {
+    if (re.test(hashtagsArray[i])) {
+      hashtagsContainer.setCustomValidity('В хештеге можно использовать только буквы,цифры и слитное написание');
+      console.log('1');
+    } else if (checkLength(hashtagsArray) === false) {
+      hashtagsContainer.setCustomValidity('Слишком большой хештег. Максимальная длина 20 символов (Включаюя #)');
+      console.log('2');
+    } else if (checkCase(hashtagsArray) === false) {
+      hashtagsContainer.setCustomValidity('Найден дубликат. Проверьте регистр');
+      console.log('3');
+    } else if (checkDuplicate(hashtagsArray) === false) {
+      hashtagsContainer.setCustomValidity('Найден дубликат');
+      console.log('4');
+    } else {
+      hashtagsContainer.setCustomValidity('');
+    }
+  }
+  if (hashtagsArray.length > maxHashtags) {
+    hashtagsContainer.setCustomValidity('Можно максимум ' + maxHashtags + ' Хештегов. Удалите пожалуйста лишние');
+    console.log('Можно максимум ' + maxHashtags + ' Хештегов');
+  }
+});
