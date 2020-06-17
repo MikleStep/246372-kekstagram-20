@@ -97,12 +97,52 @@ for (var i = 0; i < photosInformation.length; i++) {
 
 picturesElement.appendChild(pictureFragment);
 
+// Открытие и закрытие модального окна (Big Picture)
+var bigPicture = document.querySelector('.big-picture');
+var bigPictureOpen = document.querySelectorAll('.picture');
+var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
+var bigPictureImg = bigPicture.querySelector('.big-picture__img img');
+
+var addThumbnailClickHandler = function (thumbnail, photo) {
+  thumbnail.addEventListener('click', function () {
+    openPopup();
+    bigPictureImg.setAttribute('src', photo.url);
+  });
+};
+
+for (var a = 0; a < bigPictureOpen.length; a++) {
+  addThumbnailClickHandler(bigPictureOpen[a], photosInformation[a]);
+}
+
+var onPopupEscPress = function (evt) {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  bigPicture.classList.remove('hidden');
+
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  bigPicture.classList.add('hidden');
+
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+bigPictureClose.addEventListener('click', function () {
+  closePopup();
+  document.removeEventListener('keydown', onPopupEscPress);
+});
+
+
 // Задание 3.3
 var modalPhoto = document.querySelector('.big-picture');
-modalPhoto.classList.remove('hidden');
 
 var renderModalPhoto = function (photo) {
-  modalPhoto.querySelector('.big-picture__img img').setAttribute('src', photo.url);
   modalPhoto.querySelector('.likes-count').textContent = photo.likes;
   modalPhoto.querySelector('.comments-count').textContent = photo.comments.length;
   for (var k = 0; k < photo.comments.length; k++) {
@@ -118,4 +158,3 @@ renderModalPhoto(photosInformation[0]);
 
 document.querySelector('.social__comment-count').classList.add('hidden');
 document.querySelector('.comments-loader').classList.add('hidden');
-document.querySelector('body').classList.add('modal-open');
