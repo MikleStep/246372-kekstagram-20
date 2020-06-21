@@ -49,46 +49,7 @@ window.formFilter = (function (wrapper, img) {
     max: 3
   }];
 
-  var movePin = function (evt) {
-    var limitMovementX = {
-      min: effectSaturationLine.offsetLeft - 20,
-      max: effectSaturationLine.offsetLeft + effectSaturationLine.offsetWidth - effectSaturationPin.offsetWidth
-    };
-    var pinCoord = effectSaturationPin.offsetLeft + evt.movementX;
-    if (pinCoord < limitMovementX.min) {
-      pinCoord = limitMovementX.min;
-    }
-    if (pinCoord > limitMovementX.max) {
-      pinCoord = limitMovementX.max;
-    }
-    effectSaturationPin.style.left = pinCoord + 'px';
-    effectSaturationDepth.style.width = pinCoord + 'px';
-    var saturationValue = Math.round(pinCoord / effectSaturationLine.offsetWidth * 100);
-    effectSaturation.setAttribute('value', saturationValue);
-    var currentNumber;
-    for (var i = 0; i < effectsOptions.length; i++) {
-      if (effectsOptions[i].checked) {
-        currentNumber = i;
-      }
-    }
-    var filterValue = saturationValue * (effectsInformation[currentNumber].max - effectsInformation[currentNumber].min) / 100 + effectsInformation[currentNumber].min;
-    if (effectsInformation[currentNumber].units) {
-      filterValue += effectsInformation[currentNumber].units;
-    }
-    img.style.filter = effectsInformation[currentNumber].filter + '(' + filterValue + ')';
-  };
-
-  var onPinMouseup = function () {
-    document.removeEventListener('mousemove', movePin);
-    document.removeEventListener('mouseup', onPinMouseup);
-  };
-  effectSaturationPin.addEventListener('mousedown', function () {
-    effectSaturationPin.addEventListener('dragstart', function (evt) {
-      evt.preventDefault();
-    });
-    document.addEventListener('mousemove', movePin);
-    document.addEventListener('mouseup', onPinMouseup);
-  });
+  window.slider.dragSlider(effectSaturationPin, effectSaturationLine, effectSaturationDepth);
 
   return {
     effectsOptions: effectsOptions,
@@ -107,6 +68,22 @@ window.formFilter = (function (wrapper, img) {
         effectSaturationPin.style.left = effectSaturation.value + '%';
         effectSaturationDepth.style.width = effectSaturation.value + '%';
       });
+    },
+    changeSaturation: function () {
+      var pinCoord = effectSaturationPin.offsetLeft;
+      var saturationValue = Math.round(pinCoord / effectSaturationLine.offsetWidth * 100);
+      effectSaturation.setAttribute('value', saturationValue);
+      var currentNumber;
+      for (var i = 0; i < effectsOptions.length; i++) {
+        if (effectsOptions[i].checked) {
+          currentNumber = i;
+        }
+      }
+      var filterValue = saturationValue * (effectsInformation[currentNumber].max - effectsInformation[currentNumber].min) / 100 + effectsInformation[currentNumber].min;
+      if (effectsInformation[currentNumber].units) {
+        filterValue += effectsInformation[currentNumber].units;
+      }
+      img.style.filter = effectsInformation[currentNumber].filter + '(' + filterValue + ')';
     }
   };
 })(document.querySelector('.img-upload__overlay'), document.querySelector('.img-upload__preview img'));
