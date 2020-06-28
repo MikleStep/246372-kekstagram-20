@@ -55,7 +55,7 @@ window.form = (function (form, hashtagsContainter) {
   var maxHashtags = 5;
   var hashtagsArray;
 
-  form.addEventListener('input', function () {
+  hashtagsContainter.addEventListener('blur', function () {
     hashtagsArray = hashtagsContainter.value.split('#');
     hashtagsArray.splice(0, 1);
     var re = /[^a-zа-яё\d#]/;
@@ -75,5 +75,8 @@ window.form = (function (form, hashtagsContainter) {
     if (hashtagsArray.length > maxHashtags) {
       hashtagsContainter.setCustomValidity('Можно максимум ' + maxHashtags + ' Хештегов. Удалите пожалуйста лишние');
     }
+  });
+  hashtagsContainter.addEventListener('input', function () {
+    hashtagsContainter.setCustomValidity('');
   });
 })(document.querySelector('.img-upload__form'), document.querySelector('.text__hashtags'));
