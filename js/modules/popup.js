@@ -1,25 +1,20 @@
 'use strict';
 window.popup = (function (body) {
-  var onPopupEscPress = function (target) {
-    return function (evt) {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        window.popup.closeModal(target);
-      }
-    };
-  };
-
   return {
-    openModal: function (target) {
-      target.classList.remove('hidden');
-      body.classList.add('modal-open');
-      document.addEventListener('keydown', onPopupEscPress(target));
+    onPopupEscPress: function (target, input) {
+      return function (evt) {
+        if (evt.key === 'Escape') {
+          evt.preventDefault();
+          if (!target.classList.contains('hidden')) {
+            window.popup.toggleModal(target);
+            window.formClear.clearInputFile(input);
+          }
+        }
+      };
     },
-
-    closeModal: function (target) {
-      target.classList.add('hidden');
-      body.classList.remove('modal-open');
-      document.removeEventListener('keydown', onPopupEscPress(target));
+    toggleModal: function (target) {
+      target.classList.toggle('hidden');
+      body.classList.toggle('modal-open');
     }
   };
 })(document.querySelector('body'));
