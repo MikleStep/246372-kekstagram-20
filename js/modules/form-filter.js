@@ -6,6 +6,7 @@ window.formFilter = (function (wrapper, img) {
   var effectSaturationPin = wrapper.querySelector('.effect-level__pin');
   var effectSaturationDepth = wrapper.querySelector('.effect-level__depth');
   var effectSaturationLine = wrapper.querySelector('.effect-level__line');
+  var defaultFilterValue = effectSaturation.value;
   var effectsInformation = [{
     name: 'none',
     filter: 'none',
@@ -66,7 +67,7 @@ window.formFilter = (function (wrapper, img) {
           filterValue += effect.units;
         }
         img.style.filter = effect.filter + '(' + filterValue + ')';
-        effectSaturation.setAttribute('value', '100');
+        effectSaturation.setAttribute('value', defaultFilterValue);
         effectSaturationPin.style.left = effectSaturation.value + '%';
         effectSaturationDepth.style.width = effectSaturation.value + '%';
       });
