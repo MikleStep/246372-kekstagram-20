@@ -7,6 +7,7 @@ window.popup = (function (body) {
           evt.preventDefault();
           if (!target.classList.contains('hidden')) {
             window.popup.toggleModal(target);
+          } else if (input) {
             window.formClear.clearInputFile(input);
           }
         }

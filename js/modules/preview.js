@@ -4,7 +4,7 @@ window.preview = (function () {
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
   var bigPictureImg = bigPicture.querySelector('.big-picture__img img');
-
+  document.addEventListener('keydown', window.popup.onPopupEscPress(bigPicture));
   bigPictureClose.addEventListener('click', function () {
     window.popup.toggleModal(bigPicture);
   });
