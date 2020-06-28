@@ -56,7 +56,9 @@ window.formFilter = (function (wrapper, img) {
     effectsInformation: effectsInformation,
     addThumbnailClickHandler: function (thumbnail, effect) {
       thumbnail.addEventListener('click', function () {
-        img.setAttribute('class', '');
+        for (var i = 0; i < effectsOptions.length; i++) {
+          img.classList.remove('effects__preview--' + effectsInformation[i].name);
+        }
         img.style.filter = 'none';
         img.classList.add('effects__preview--' + effect.name);
         var filterValue = effect.start;
