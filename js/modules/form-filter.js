@@ -51,7 +51,6 @@ window.formFilter = (function (wrapper, img) {
   }];
 
   window.slider.dragSlider(effectSaturationPin, effectSaturationLine, effectSaturationDepth);
-
   return {
     effectsOptions: effectsOptions,
     effectsInformation: effectsInformation,
