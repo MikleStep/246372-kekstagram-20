@@ -24,7 +24,7 @@ window.form = (function () {
       window.popup.toggleModal(uploadWrapper);
       window.formReset.fullReserForm(uploadFile);
       window.formReset.resetInputs();
-    });
+    }, window.backend.error);
     evt.preventDefault();
   };
 
