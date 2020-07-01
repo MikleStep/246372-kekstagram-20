@@ -5,12 +5,13 @@ window.form = (function () {
   var uploadFile = document.querySelector('#upload-file');
   var uploadClose = document.querySelector('#upload-cancel');
   var uploadWrapper = document.querySelector('.img-upload__overlay');
+  document.addEventListener('keydown', window.popup.onPopupEscPress(uploadWrapper, uploadFile));
   uploadFile.addEventListener('change', function () {
-    window.popup.openModal(uploadWrapper);
+    window.popup.toggleModal(uploadWrapper);
   });
 
   uploadClose.addEventListener('click', function () {
-    window.popup.closeModal(uploadWrapper);
-    uploadFile.value = '';
+    window.popup.toggleModal(uploadWrapper);
+    window.formClear.clearInputFile(uploadFile);
   });
 })();

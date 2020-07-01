@@ -4,9 +4,9 @@ window.preview = (function () {
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
   var bigPictureImg = bigPicture.querySelector('.big-picture__img img');
-
+  document.addEventListener('keydown', window.popup.onPopupEscPress(bigPicture));
   bigPictureClose.addEventListener('click', function () {
-    window.popup.closeModal(bigPicture);
+    window.popup.toggleModal(bigPicture);
   });
 
   var renderbigPicture = function (photo) {
@@ -30,7 +30,7 @@ window.preview = (function () {
   return {
     addPictureClickHandler: function (thumbnail, photo) {
       thumbnail.addEventListener('click', function () {
-        window.popup.openModal(bigPicture);
+        window.popup.toggleModal(bigPicture);
         bigPictureImg.setAttribute('src', photo.url);
       });
     }

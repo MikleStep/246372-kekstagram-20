@@ -55,25 +55,32 @@ window.form = (function (form, hashtagsContainter) {
   var maxHashtags = 5;
   var hashtagsArray;
 
-  form.addEventListener('input', function () {
-    hashtagsArray = hashtagsContainter.value.split('#');
-    hashtagsArray.splice(0, 1);
-    var re = /[^a-zа-яё\d#]/;
-    for (var i = 0; i < hashtagsArray.length; i++) {
-      if (re.test(hashtagsArray[i])) {
-        hashtagsContainter.setCustomValidity('В хештеге можно использовать только буквы,цифры и слитное написание');
-      } else if (checkLength(hashtagsArray) === false) {
-        hashtagsContainter.setCustomValidity('Слишком большой хештег. Максимальная длина 20 символов (Включаюя #)');
-      } else if (checkCase(hashtagsArray) === false) {
-        hashtagsContainter.setCustomValidity('Найден дубликат. Проверьте регистр');
-      } else if (checkDuplicate(hashtagsArray) === false) {
-        hashtagsContainter.setCustomValidity('Найден дубликат');
-      } else {
-        hashtagsContainter.setCustomValidity('');
+  hashtagsContainter.addEventListener('blur', function () {
+    if (hashtagsContainter.value.substr(-1) === '#') {
+      hashtagsContainter.setCustomValidity('Нельзя использовать пустой хештег');
+    } else {
+      hashtagsArray = hashtagsContainter.value.split('#');
+      hashtagsArray.splice(0, 1);
+      var re = /[^a-zа-яё\d#]/;
+      for (var i = 0; i < hashtagsArray.length; i++) {
+        if (re.test(hashtagsArray[i])) {
+          hashtagsContainter.setCustomValidity('В хештеге можно использовать только буквы,цифры и слитное написание');
+        } else if (checkLength(hashtagsArray) === false) {
+          hashtagsContainter.setCustomValidity('Слишком большой хештег. Максимальная длина 20 символов (Включаюя #)');
+        } else if (checkCase(hashtagsArray) === false) {
+          hashtagsContainter.setCustomValidity('Найден дубликат. Проверьте регистр');
+        } else if (checkDuplicate(hashtagsArray) === false) {
+          hashtagsContainter.setCustomValidity('Найден дубликат');
+        } else {
+          hashtagsContainter.setCustomValidity('');
+        }
+      }
+      if (hashtagsArray.length > maxHashtags) {
+        hashtagsContainter.setCustomValidity('Можно максимум ' + maxHashtags + ' Хештегов. Удалите пожалуйста лишние');
       }
     }
-    if (hashtagsArray.length > maxHashtags) {
-      hashtagsContainter.setCustomValidity('Можно максимум ' + maxHashtags + ' Хештегов. Удалите пожалуйста лишние');
-    }
+  });
+  hashtagsContainter.addEventListener('input', function () {
+    hashtagsContainter.setCustomValidity('');
   });
 })(document.querySelector('.img-upload__form'), document.querySelector('.text__hashtags'));
