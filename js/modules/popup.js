@@ -1,6 +1,7 @@
 'use strict';
 window.popup = (function (body) {
   var exceptions = [document.querySelector('.text__hashtags'), document.querySelector('.text__description'), document.querySelector('.social__footer-text')];
+
   return {
     onPopupEscPress: function (target, input) {
       return function (evt) {
@@ -18,6 +19,7 @@ window.popup = (function (body) {
         return evt;
       };
     },
+
     removePopupEscPress: function (modal) {
       return function (evt) {
         if (evt.key === 'Escape') {
@@ -26,10 +28,12 @@ window.popup = (function (body) {
         }
       };
     },
+
     toggleModal: function (target) {
       target.classList.toggle('hidden');
       body.classList.toggle('modal-open');
     },
+
     closePopup: function (target, input) {
       window.popup.toggleModal(target);
       window.formReset.fullReserForm(input);

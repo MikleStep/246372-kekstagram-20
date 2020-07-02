@@ -8,6 +8,7 @@ window.backend = (function () {
   var TIMEOUT_IN_MS = 10000;
   var uploadFile = document.querySelector('#upload-file');
   var uploadWrapper = document.querySelector('.img-upload__overlay');
+
   var showResult = function (block) {
     var template = block.cloneNode(true);
     var fragment = document.createDocumentFragment();
@@ -15,44 +16,70 @@ window.backend = (function () {
     var main = document.querySelector('main');
     main.appendChild(fragment);
   };
+  var closeResult = function (button, modal, inner) {
 
+    document.querySelector('body').classList.toggle('modal-open');
 
+    button.addEventListener('click', function () {
+      modal.remove();
+      document.querySelector('body').classList.toggle('modal-open');
+    });
+
+    document.addEventListener('click', function (evt) {
+      var isClickInside = inner.contains(evt.target);
+
+      if (!isClickInside) {
+        modal.remove();
+        document.querySelector('body').classList.toggle('modal-open');
+      }
+    });
+
+    document.addEventListener('keydown', window.popup.removePopupEscPress(modal));
+  };
   return {
     savePhoto: function (data, onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
+
       var successTemplate = document.querySelector('#success').content.querySelector('.success');
+
       var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+
       xhr.addEventListener('load', function () {
         if (xhr.status === StatusCode.OK) {
+
           onLoad(xhr.response);
+
           window.formReset.fullReserForm(uploadFile);
+
           showResult(successTemplate);
+
           var successButton = document.querySelector('.success__button');
           var successModal = document.querySelector('.success');
-          successButton.addEventListener('click', function () {
-            successModal.remove();
-          });
-          document.addEventListener('keydown', window.popup.removePopupEscPress(successModal));
+          var successInner = document.querySelector('.success__inner');
+
+          closeResult(successButton, successModal, successInner);
+
         } else {
           window.popup.closePopup(uploadWrapper, uploadFile);
           showResult(errorTemplate);
+
           var errorButton = document.querySelector('.error__button');
           var errorModal = document.querySelector('.error');
-          errorButton.addEventListener('click', function () {
-            errorModal.remove();
-          });
-          document.addEventListener('keydown', window.popup.removePopupEscPress(errorModal));
+          var errorInner = document.querySelector('.error__inner');
+
+          closeResult(errorButton, errorModal, errorInner);
         }
       });
       xhr.addEventListener('error', function () {
         onError('Произошла ошибка соединения');
       });
+
       xhr.addEventListener('timeout', function () {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       });
 
-      xhr.open('POST', URL);
+      xhr.open('POST', URL + '1');
       xhr.send(data);
     },
 
@@ -68,9 +95,11 @@ window.backend = (function () {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
         }
       });
+
       xhr.addEventListener('error', function () {
         onError('Произошла ошибка соединения');
       });
+
       xhr.addEventListener('timeout', function () {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       });

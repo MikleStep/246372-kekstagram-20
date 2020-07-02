@@ -4,12 +4,15 @@ window.preview = (function () {
   var MAX_COMMENTS = 5;
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
+
   document.addEventListener('keydown', window.popup.onPopupEscPress(bigPicture, document.querySelector('.social__footer-text')));
+
   bigPictureClose.addEventListener('click', function () {
     window.popup.toggleModal(bigPicture);
   });
 
   var commentsWrapper = bigPicture.querySelector('.social__comments');
+
   var renderComments = function (photo, quantity) {
     commentsWrapper.innerHTML = '';
     for (var k = 0; k < quantity; k++) {
@@ -21,6 +24,7 @@ window.preview = (function () {
 
   var renderbigPicture = function (photo) {
     var commentsLoader = document.querySelector('.comments-loader');
+
     bigPicture.querySelector('.big-picture__img img').setAttribute('src', photo.url);
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
@@ -32,11 +36,14 @@ window.preview = (function () {
       renderComments(photo, MAX_COMMENTS);
       commentsLoader.classList.remove('hidden');
     }
+
     commentsLoader.addEventListener('click', function () {
       commentsLoader.classList.add('hidden');
       renderComments(photo, photo.comments.length);
     });
+
     bigPicture.querySelector('.social__caption').textContent = photo.description;
+
     return bigPicture;
   };
 

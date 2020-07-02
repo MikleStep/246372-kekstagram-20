@@ -8,6 +8,7 @@ window.formFilter = (function (wrapper, img) {
   var effectSaturationLine = wrapper.querySelector('.effect-level__line');
   var defaultFilterValue = effectSaturation.value;
   var effectLevel = document.querySelector('.img-upload__effect-level');
+
   var effectsInformation = [{
     name: 'none',
     filter: 'none',
@@ -52,11 +53,13 @@ window.formFilter = (function (wrapper, img) {
   }];
 
   window.slider.dragSlider(effectSaturationPin, effectSaturationLine, effectSaturationDepth);
+
   return {
     defaultFilterValue: defaultFilterValue,
     effectsOptions: effectsOptions,
     effectsInformation: effectsInformation,
     effectSaturation: effectSaturation,
+
     addThumbnailClickHandler: function (thumbnail, effect) {
       thumbnail.addEventListener('click', function () {
         window.formReset.resetClassFilter();
@@ -77,6 +80,7 @@ window.formFilter = (function (wrapper, img) {
         effectSaturationDepth.style.width = effectSaturation.value + '%';
       });
     },
+
     changeSaturation: function () {
       var pinCoord = effectSaturationPin.offsetLeft;
       var saturationValue = Math.round(pinCoord / effectSaturationLine.offsetWidth * 100);
