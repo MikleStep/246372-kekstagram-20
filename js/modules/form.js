@@ -6,6 +6,9 @@ window.form = (function () {
   var uploadClose = document.querySelector('#upload-cancel');
   var uploadWrapper = document.querySelector('.img-upload__overlay');
   var uploadForm = document.querySelector('#upload-select-image');
+  var effectLevel = document.querySelector('.img-upload__effect-level');
+
+  effectLevel.style.display = 'none';
 
   document.addEventListener('keydown', window.popup.onPopupEscPress(uploadWrapper, uploadFile));
 
@@ -14,19 +17,20 @@ window.form = (function () {
   });
 
   uploadClose.addEventListener('click', function () {
-    window.popup.toggleModal(uploadWrapper);
-    window.formReset.fullReserForm(uploadFile);
-    window.formReset.resetInputs();
+    window.popup.closePopup(uploadWrapper, uploadFile);
   });
 
   var submitHandler = function (evt) {
     window.backend.savePhoto(new FormData(uploadForm), function () {
-      window.popup.toggleModal(uploadWrapper);
-      window.formReset.fullReserForm(uploadFile);
-      window.formReset.resetInputs();
+      window.popup.closePopup(uploadWrapper, uploadFile);
     }, window.backend.error);
     evt.preventDefault();
   };
 
   uploadForm.addEventListener('submit', submitHandler);
+
+  return {
+    uploadWrapper: uploadWrapper,
+    uploadFile: uploadFile
+  };
 })();
