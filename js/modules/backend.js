@@ -6,29 +6,82 @@ window.backend = (function () {
     OK: 200
   };
   var TIMEOUT_IN_MS = 10000;
+  var uploadFile = document.querySelector('#upload-file');
+  var uploadWrapper = document.querySelector('.img-upload__overlay');
 
+  var showResult = function (block) {
+    var template = block.cloneNode(true);
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(template);
+    var main = document.querySelector('main');
+    main.appendChild(fragment);
+  };
+  var closeResult = function (button, modal, inner) {
+
+    document.querySelector('body').classList.toggle('modal-open');
+
+    button.addEventListener('click', function () {
+      modal.remove();
+      document.querySelector('body').classList.toggle('modal-open');
+    });
+
+    document.addEventListener('click', function (evt) {
+      var isClickInside = inner.contains(evt.target);
+
+      if (!isClickInside) {
+        modal.remove();
+        document.querySelector('body').classList.toggle('modal-open');
+      }
+    });
+
+    document.addEventListener('keydown', window.popup.removePopupEscPress(modal));
+  };
   return {
-    // save: function (data, onLoad, onError) {
-    //   var xhr = new XMLHttpRequest();
-    //   xhr.responseType = 'json';
+    savePhoto: function (data, onLoad, onError) {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'json';
 
-    //   xhr.addEventListener('load', function () {
-    //     if (xhr.status === StatusCode.OK) {
-    //       onLoad(xhr.response);
-    //     } else {
-    //       onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-    //     }
-    //   });
-    //   xhr.addEventListener('error', function () {
-    //     onError('Произошла ошибка соединения');
-    //   });
-    //   xhr.addEventListener('timeout', function () {
-    //     onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-    //   });
+      var successTemplate = document.querySelector('#success').content.querySelector('.success');
 
-    //   xhr.open('POST', URL);
-    //   xhr.send(data);
-    // },
+      var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+
+      xhr.addEventListener('load', function () {
+        if (xhr.status === StatusCode.OK) {
+
+          onLoad(xhr.response);
+
+          window.formReset.fullReserForm(uploadFile);
+
+          showResult(successTemplate);
+
+          var successButton = document.querySelector('.success__button');
+          var successModal = document.querySelector('.success');
+          var successInner = document.querySelector('.success__inner');
+
+          closeResult(successButton, successModal, successInner);
+
+        } else {
+          window.popup.closePopup(uploadWrapper, uploadFile);
+          showResult(errorTemplate);
+
+          var errorButton = document.querySelector('.error__button');
+          var errorModal = document.querySelector('.error');
+          var errorInner = document.querySelector('.error__inner');
+
+          closeResult(errorButton, errorModal, errorInner);
+        }
+      });
+      xhr.addEventListener('error', function () {
+        onError('Произошла ошибка соединения');
+      });
+
+      xhr.addEventListener('timeout', function () {
+        onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      });
+
+      xhr.open('POST', URL);
+      xhr.send(data);
+    },
 
     loadPhotos: function (onLoad, onError) {
 
@@ -42,9 +95,11 @@ window.backend = (function () {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
         }
       });
+
       xhr.addEventListener('error', function () {
         onError('Произошла ошибка соединения');
       });
+
       xhr.addEventListener('timeout', function () {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       });
@@ -54,6 +109,7 @@ window.backend = (function () {
       xhr.open('GET', URL + '/data');
       xhr.send();
     },
+
     error: function (errorMessage) {
       var node = document.createElement('div');
       node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #dc291a;';

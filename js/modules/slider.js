@@ -3,6 +3,7 @@ window.slider = (function () {
   return {
     dragSlider: function (pin, line, depth) {
       var isPinPassed;
+
       var movePin = function (evt) {
         var limitMovementX = {
           min: line.offsetLeft - 20,
@@ -18,9 +19,11 @@ window.slider = (function () {
         pin.style.left = pinCoord + 'px';
         depth.style.width = pinCoord + 'px';
       };
+
       pin.addEventListener('mousedown', function () {
         isPinPassed = true;
       });
+
       document.addEventListener('mouseup', function () {
         isPinPassed = false;
       });

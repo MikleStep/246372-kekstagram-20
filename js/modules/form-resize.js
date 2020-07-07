@@ -1,6 +1,9 @@
 // Задание 4.2.2 Редактирование изображения и ограничения, накладываемые на поля
 'use strict';
 window.formResize = (function (wrapper, img) {
+  var IMG_SIZE_STEP = 25;
+  var IMG_SIZE_MAX = 100;
+  var IMG_SIZE_MIN = 25;
   var imgIncrease = wrapper.querySelector('.scale__control--bigger');
   var imgReduce = wrapper.querySelector('.scale__control--smaller');
   var imgSize = wrapper.querySelector('.scale__control--value');
@@ -12,20 +15,24 @@ window.formResize = (function (wrapper, img) {
 
   var changeSizeImg = function (step) {
     imgValue += step;
-    if (imgValue > 100) {
-      imgValue = 100;
-    } else if (imgValue < 25) {
-      imgValue = 25;
+    if (imgValue > IMG_SIZE_MAX) {
+      imgValue = IMG_SIZE_MAX;
+    } else if (imgValue < IMG_SIZE_MIN) {
+      imgValue = IMG_SIZE_MIN;
     }
-    img.style.transform = 'scale' + '(' + imgValue / 100 + ')';
+    img.style.transform = 'scale' + '(' + imgValue / IMG_SIZE_MAX + ')';
     return imgValue;
   };
 
   imgIncrease.addEventListener('click', function () {
-    imgSize.setAttribute('value', changeSizeImg(25) + '%');
+    imgSize.setAttribute('value', changeSizeImg(IMG_SIZE_STEP) + '%');
   });
 
   imgReduce.addEventListener('click', function () {
-    imgSize.setAttribute('value', changeSizeImg(-25) + '%');
+    imgSize.setAttribute('value', changeSizeImg(-IMG_SIZE_STEP) + '%');
   });
+
+  return {
+    imgSizeMax: IMG_SIZE_MAX
+  };
 })(document.querySelector('.img-upload__overlay'), document.querySelector('.img-upload__preview img'));

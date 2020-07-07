@@ -7,6 +7,7 @@ window.form = (function (form, hashtagsContainter) {
       hashtagsContainter.value += '#';
     }
   });
+
   hashtagsContainter.addEventListener('keydown', function (evt) {
     hashtagsContainter.value = '#' + hashtagsContainter.value.slice(1);
     if (evt.key === ' ') {
@@ -62,6 +63,7 @@ window.form = (function (form, hashtagsContainter) {
       hashtagsArray = hashtagsContainter.value.split('#');
       hashtagsArray.splice(0, 1);
       var re = /[^a-zа-яё\d#]/;
+
       for (var i = 0; i < hashtagsArray.length; i++) {
         if (re.test(hashtagsArray[i])) {
           hashtagsContainter.setCustomValidity('В хештеге можно использовать только буквы,цифры и слитное написание');
@@ -75,11 +77,13 @@ window.form = (function (form, hashtagsContainter) {
           hashtagsContainter.setCustomValidity('');
         }
       }
+
       if (hashtagsArray.length > maxHashtags) {
         hashtagsContainter.setCustomValidity('Можно максимум ' + maxHashtags + ' Хештегов. Удалите пожалуйста лишние');
       }
     }
   });
+
   hashtagsContainter.addEventListener('input', function () {
     hashtagsContainter.setCustomValidity('');
   });

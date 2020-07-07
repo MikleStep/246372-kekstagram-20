@@ -7,6 +7,8 @@ window.formFilter = (function (wrapper, img) {
   var effectSaturationDepth = wrapper.querySelector('.effect-level__depth');
   var effectSaturationLine = wrapper.querySelector('.effect-level__line');
   var defaultFilterValue = effectSaturation.value;
+  var effectLevel = document.querySelector('.img-upload__effect-level');
+
   var effectsInformation = [{
     name: 'none',
     filter: 'none',
@@ -51,19 +53,26 @@ window.formFilter = (function (wrapper, img) {
   }];
 
   window.slider.dragSlider(effectSaturationPin, effectSaturationLine, effectSaturationDepth);
+
   return {
+    defaultFilterValue: defaultFilterValue,
     effectsOptions: effectsOptions,
     effectsInformation: effectsInformation,
+    effectSaturation: effectSaturation,
+
     addThumbnailClickHandler: function (thumbnail, effect) {
       thumbnail.addEventListener('click', function () {
-        for (var i = 0; i < effectsOptions.length; i++) {
-          img.classList.remove('effects__preview--' + effectsInformation[i].name);
-        }
+        window.formReset.resetClassFilter();
         img.style.filter = 'none';
         img.classList.add('effects__preview--' + effect.name);
         var filterValue = effect.start;
         if (effect.units) {
           filterValue += effect.units;
+        }
+        if (effect.name === 'none') {
+          effectLevel.style.display = 'none';
+        } else {
+          effectLevel.style.display = 'block';
         }
         img.style.filter = effect.filter + '(' + filterValue + ')';
         effectSaturation.setAttribute('value', defaultFilterValue);
@@ -71,6 +80,7 @@ window.formFilter = (function (wrapper, img) {
         effectSaturationDepth.style.width = effectSaturation.value + '%';
       });
     },
+
     changeSaturation: function () {
       var pinCoord = effectSaturationPin.offsetLeft;
       var saturationValue = Math.round(pinCoord / effectSaturationLine.offsetWidth * 100);
