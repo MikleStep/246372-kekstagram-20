@@ -79,7 +79,7 @@ window.backend = (function () {
         onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       });
 
-      xhr.open('POST', URL + '1');
+      xhr.open('POST', URL);
       xhr.send(data);
     },
 
