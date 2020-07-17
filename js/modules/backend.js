@@ -8,7 +8,6 @@ window.backend = (function () {
   var TIMEOUT_IN_MS = 10000;
   var uploadFile = document.querySelector('#upload-file');
   var uploadWrapper = document.querySelector('.img-upload__overlay');
-  var imgFilters = document.querySelector('.img-filters');
   var showResult = function (block) {
     var template = block.cloneNode(true);
     var fragment = document.createDocumentFragment();
@@ -91,7 +90,6 @@ window.backend = (function () {
       xhr.addEventListener('load', function () {
         if (xhr.status === StatusCode.OK) {
           onLoad(xhr.response);
-          imgFilters.classList.remove('img-filters--inactive');
         } else {
           onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
         }
