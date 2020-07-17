@@ -3,13 +3,6 @@ window.gallery = (function (wrapper) {
   var picturesTemplate = document.querySelector('#picture').content.querySelector('.picture');
   var defaultPhotos = [];
 
-  var addPhotoHendler = function () {
-    var bigPictureOpen = document.querySelectorAll('.picture');
-    for (var i = 0; i < bigPictureOpen.length; i++) {
-      window.preview.addPictureClickHandler(bigPictureOpen[i], window.filter.photos[i]);
-    }
-  };
-
   var renderPhoto = function (photo) {
     var pictureElement = picturesTemplate.cloneNode(true);
 
@@ -23,7 +16,6 @@ window.gallery = (function (wrapper) {
     window.gallery.defaultPhotos = data;
     window.filter.photos = window.gallery.defaultPhotos.slice();
     window.filter.updatePhotos(window.gallery.defaultPhotos.length);
-    addPhotoHendler();
   };
 
   window.backend.loadPhotos(successLoadPhotos, window.backend.error);
@@ -41,6 +33,12 @@ window.gallery = (function (wrapper) {
       var pictures = document.querySelectorAll('.picture');
       for (var i = 0; i < pictures.length; i++) {
         pictures[i].remove();
+      }
+    },
+    addPhotoHendler: function () {
+      var bigPictureOpen = document.querySelectorAll('.picture');
+      for (var i = 0; i < bigPictureOpen.length; i++) {
+        window.preview.addPictureClickHandler(bigPictureOpen[i], window.filter.photos[i]);
       }
     }
   };

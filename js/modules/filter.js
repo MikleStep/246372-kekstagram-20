@@ -51,6 +51,7 @@ window.filter = (function () {
     updatePhotos: function (quantity) {
       window.setTimeout(function () {
         window.gallery.renderTemplatePhoto(window.filter.photos, quantity);
+        window.gallery.addPhotoHendler();
       }, DEBOUNCE_INTERVAL);
     }
   };
