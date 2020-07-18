@@ -14,7 +14,7 @@ window.gallery = (function (wrapper) {
 
   var successLoadPhotos = function (data) {
     window.gallery.defaultPhotos = data;
-    window.filter.photos = window.gallery.defaultPhotos.slice();
+    window.filter.photos = window.gallery.defaultPhotos;
     window.filter.updatePhotos(window.gallery.defaultPhotos.length, window.filter.hideFilters);
   };
 
