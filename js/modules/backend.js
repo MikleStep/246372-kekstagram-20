@@ -109,7 +109,7 @@ window.backend = (function () {
       xhr.send();
     },
 
-    error: function (errorMessage) {
+    showError: function (errorMessage) {
       var node = document.createElement('div');
       node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: #dc291a;';
       node.style.position = 'absolute';

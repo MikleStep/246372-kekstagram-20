@@ -1,5 +1,5 @@
 'use strict';
-window.form = (function (form, hashtagsContainter) {
+window.form = (function (hashtagsContainter) {
   // Задание 4.2.4 Валидация хеш-тегов
 
   hashtagsContainter.addEventListener('click', function () {
@@ -87,4 +87,4 @@ window.form = (function (form, hashtagsContainter) {
   hashtagsContainter.addEventListener('input', function () {
     hashtagsContainter.setCustomValidity('');
   });
-})(document.querySelector('.img-upload__form'), document.querySelector('.text__hashtags'));
+})(document.querySelector('.text__hashtags'));
