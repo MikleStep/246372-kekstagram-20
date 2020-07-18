@@ -13,6 +13,8 @@ window.form = (function () {
 
   document.addEventListener('keydown', window.popup.onPopupEscPress(uploadWrapper, uploadFile));
 
+  /* Функция добавления пользовательского изображения для редактирования */
+
   uploadFile.addEventListener('change', function () {
     window.popup.toggleModal(uploadWrapper);
     var file = uploadFile.files[0];
