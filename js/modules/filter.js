@@ -17,7 +17,7 @@ window.filter = (function () {
         filtersButtons[i].classList.remove('img-filters__button--active');
       }
       thumbnail.classList.add('img-filters__button--active');
-      window.filter.photos = window.gallery.defaultPhotos.slice();
+      window.filter.photos = window.gallery.defaultPhotos;
       window.gallery.deletePhotos();
     });
   };
