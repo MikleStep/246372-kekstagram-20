@@ -20,7 +20,6 @@ window.backend = (function () {
   var currentModal;
 
   var closeModalHendler = function (evt) {
-    console.log(evt.target);
     var isClickInside = currentInner.contains(evt.target);
 
     if (!isClickInside) {
@@ -40,7 +39,7 @@ window.backend = (function () {
     });
     currentInner = inner;
     currentModal = modal;
-    document.addEventListener('click', closeModalHendler, true);
+    document.addEventListener('click', closeModalHendler);
 
   };
   return {
