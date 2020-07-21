@@ -8,6 +8,7 @@ window.backend = (function () {
   var TIMEOUT_IN_MS = 10000;
   var uploadFile = document.querySelector('#upload-file');
   var uploadWrapper = document.querySelector('.img-upload__overlay');
+
   var showResult = function (block) {
     var template = block.cloneNode(true);
     var fragment = document.createDocumentFragment();
@@ -15,6 +16,19 @@ window.backend = (function () {
     var main = document.querySelector('main');
     main.appendChild(fragment);
   };
+  var currentInner;
+  var currentModal;
+
+  var closeModalHendler = function (evt) {
+    var isClickInside = currentInner.contains(evt.target);
+
+    if (!isClickInside) {
+      currentModal.remove();
+      document.querySelector('body').classList.toggle('modal-open');
+    }
+    document.removeEventListener('click', closeModalHendler, false);
+  };
+
   var closeResult = function (button, modal, inner) {
 
     document.querySelector('body').classList.toggle('modal-open');
@@ -23,17 +37,10 @@ window.backend = (function () {
       modal.remove();
       document.querySelector('body').classList.toggle('modal-open');
     });
+    currentInner = inner;
+    currentModal = modal;
+    document.addEventListener('click', closeModalHendler);
 
-    document.addEventListener('click', function (evt) {
-      var isClickInside = inner.contains(evt.target);
-
-      if (!isClickInside) {
-        modal.remove();
-        document.querySelector('body').classList.toggle('modal-open');
-      }
-    });
-
-    document.addEventListener('keydown', window.popup.removePopupEscPress(modal));
   };
   return {
     savePhoto: function (data, onLoad, onError) {
@@ -49,7 +56,7 @@ window.backend = (function () {
 
           onLoad(xhr.response);
 
-          window.formReset.fullReserForm(uploadFile);
+          window.formReset.fullResetForm(uploadFile);
 
           showResult(successTemplate);
 

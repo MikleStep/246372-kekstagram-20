@@ -5,7 +5,7 @@ window.formReset = (function () {
   var resetImg = function () {
     var effectLevel = document.querySelector('.img-upload__effect-level');
     var imgSize = document.querySelector('.scale__control--value');
-    document.querySelector('#effect-none').setAttribute('checked', true);
+    document.querySelector('#effect-none').checked = true;
 
     effectLevel.style.display = 'none';
 
@@ -40,7 +40,7 @@ window.formReset = (function () {
       }
     },
 
-    fullReserForm: function (input) {
+    fullResetForm: function (input) {
       window.formReset.resetForm(input);
       window.formReset.resetClassFilter();
       resetImg();

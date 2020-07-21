@@ -36,7 +36,7 @@ window.popup = (function (body) {
 
     closePopup: function (target, input) {
       window.popup.toggleModal(target);
-      window.formReset.fullReserForm(input);
+      window.formReset.fullResetForm(input);
       window.formReset.resetInputs();
     }
   };
