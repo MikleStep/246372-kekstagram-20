@@ -20,15 +20,6 @@ window.popup = (function (body) {
       };
     },
 
-    removePopupEscPress: function (modal) {
-      return function (evt) {
-        if (evt.key === 'Escape') {
-          evt.preventDefault();
-          modal.remove();
-        }
-      };
-    },
-
     toggleModal: function (target) {
       target.classList.toggle('hidden');
       body.classList.toggle('modal-open');
